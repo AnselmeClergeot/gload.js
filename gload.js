@@ -25,6 +25,28 @@ function progressBar(width, height, backgroundColor, color)
 		
 		this.progressUpdater.start();
 	}
+	
+	this.setColors = function(backgroundColor, color)
+	{
+		this.graphicUpdater.backgroundColor = backgroundColor;
+		this.graphicUpdater.color = color;
+	}
+	
+	this.setBorder = function(borderWidth, borderColor)
+	{
+		this.graphicUpdater.borderWidth = borderWidth;
+		this.graphicUpdater.borderColor = borderColor;
+	}
+	
+	this.setBackgroundImage = function(backgroundImage)
+	{
+		this.graphicUpdater.backgroundImage.src = backgroundImage;
+	}
+	
+	this.setFillImage = function(fillImage)
+	{
+		this.graphicUpdater.fillImage.src = fillImage;
+	}
 }
 
 function progressUpdater(graphicUpdater)
@@ -75,6 +97,22 @@ function graphicUpdater(width, height, backgroundColor, color)
 	this.backgroundColor = backgroundColor;
 	this.color = color;
 	
+	this.borderWidth = 0;
+	this.borderColor = 0;
+	
+	this.backgroundImage = new Image();
+	this.fillImage = new Image();
+	
+	this.backgroundImage.onerror = function()
+	{
+		console.log("Cannot load background image");
+	}
+	
+	this.fillImage.onerror = function()
+	{
+		console.log("Cannot load fill image");
+	}
+	
 	this.actualProgression = 0;
 	
 	this.start = function()
@@ -87,12 +125,36 @@ function graphicUpdater(width, height, backgroundColor, color)
 	this.update = function()
 	{
 		var ctx = self.canvas.getContext("2d");
-		console.log(self.actualProgression*self.width);
+		
 		ctx.clearRect(self.barX, self.barY, self.width, self.height);
+		
+		if(self.backgroundImage.src=="")
+		{
 		ctx.fillStyle = self.backgroundColor;
 		ctx.fillRect(self.barX, self.barY, self.width, self.height);
+		}
+		else
+		{
+			ctx.drawImage(self.backgroundImage, 0, 0, self.width, self.height, self.barX, self.barY, self.width, self.height);
+		}
+		
+		if(self.fillImage.src=="")
+		{
 		ctx.fillStyle = self.color;
 		ctx.fillRect(self.barX, self.barY, self.actualProgression*self.width, self.height);
+		}
+		else
+		{
+			ctx.drawImage(self.fillImage, 0, 0, self.actualProgression*self.width, self.height, self.barX, self.barY, self.actualProgression*self.width, self.height);
+		}
+		
+		
+		if(self.borderWidth > 0)
+		{
+			ctx.strokeStyle = self.borderColor;
+			ctx.lineWidth = self.borderWidth;
+			ctx.strokeRect(self.barX, self.barY, self.width, self.height);
+		}
 	}
 }
 
@@ -104,7 +166,7 @@ function file(path, type, size, progressUpdater)
 	
 	if(type=="Image")
 		this.file = new Image();
-	if(type=="Audio")
+	else if(type=="Audio")
 		this.file = new Audio();
 	else
 		console.log("Error on file type");
