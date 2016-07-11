@@ -13,9 +13,9 @@ function progressBar(width, height, backgroundColor, color)
 		this.graphicUpdater.barY = barY;
 	}
 	
-	this.addFile = function(path, type, size)
+	this.addFileToLoad = function(fileObject, path, size)
 	{
-		this.progressUpdater.addFile(path, type, size);
+		this.progressUpdater.addFile(fileObject, path, size);
 	}
 	
 	this.start = function()
@@ -63,9 +63,9 @@ function progressUpdater(graphicUpdater)
 		this.files[0].load();
 	}
 	
-	this.addFile = function(path, type, size)
+	this.addFile = function(fileObject, path, size)
 	{
-		this.files.push(new file(path, type, size, this));
+		this.files.push(new file(fileObject, path, size, this));
 		this.totalFileSize+=size;
 		this.totalFileNumber++;
 	}
@@ -158,18 +158,12 @@ function graphicUpdater(width, height, backgroundColor, color)
 	}
 }
 
-function file(path, type, size, progressUpdater)
+function file(fileObject, path, size, progressUpdater)
 {
 	this.path = path;
 	this.size = size;
 	this.progressUpdater = progressUpdater;
-	
-	if(type=="Image")
-		this.file = new Image();
-	else if(type=="Audio")
-		this.file = new Audio();
-	else
-		console.log("Error on file type");
+	this.file = fileObject;
 	
 	this.load = function()
 	{
