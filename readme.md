@@ -4,3 +4,5 @@ gload.js enables you to preload the files (Image and Audio) that your js applica
 
 **gload.js is the easiest and quickest way to preload your files.** You don't need to change anything to your project.
 gload.js uses HTML5 canvas so it is supported by all the browser, even on smartphones. If your application already uses a canvas element, gload.js will use it !
+
+Start learning in 5 minutes : [wiki](https://github.com/AnselmeClergeot/gload.js/wiki)
