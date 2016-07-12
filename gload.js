@@ -176,6 +176,8 @@ function graphicUpdater(width, height, backgroundColor, color)
 	{
 		clearInterval(self.intervalId);
 		
+		self.update();
+		
 		if(self.createdCanvas)
 			document.getElementById("gloadCanvas").remove();
 		
