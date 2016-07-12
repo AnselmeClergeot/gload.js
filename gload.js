@@ -11,6 +11,7 @@ function progressBar(width, height, backgroundColor, color)
 		this.graphicUpdater.canvas = canvas;
 		this.graphicUpdater.barX = barX;
 		this.graphicUpdater.barY = barY;
+		this.graphicUpdater.createdCanvas = false;
 	}
 	
 	this.addFileToLoad = function(fileObject, path, size)
@@ -47,15 +48,22 @@ function progressBar(width, height, backgroundColor, color)
 	{
 		this.graphicUpdater.fillImage.src = fillImage;
 	}
+	
+	this.setCloseTime = function(time)
+	{
+		this.progressUpdater.closeTime = time;
+	}
 }
 
 function progressUpdater(graphicUpdater)
 {
+	var self = this;
 	this.files = Array();
 	this.totalFileSize = 0;
 	this.actualFile = 0;
 	this.totalFileNumber = 0;
 	this.graphicUpdater = graphicUpdater;
+	this.closeTime = 0;
 	
 	this.start = function()
 	{
@@ -70,6 +78,8 @@ function progressUpdater(graphicUpdater)
 		this.totalFileNumber++;
 	}
 	
+	
+	
 	this.fileHasLoaded = function()
 	{
 		this.graphicUpdater.actualProgression+=(this.files[this.actualFile].size/this.totalFileSize);
@@ -78,12 +88,15 @@ function progressUpdater(graphicUpdater)
 		this.actualFile++;
 		this.files[this.actualFile].load();
 		}
+		else
+			setTimeout(this.graphicUpdater.stopLoading, this.closeTime);
 	}
 }
 
 function graphicUpdater(width, height, backgroundColor, color)
 {
 	this.canvas;
+	this.createdCanvas = true;
 	
 	this.createCanvas = function()
 	{
@@ -103,6 +116,8 @@ function graphicUpdater(width, height, backgroundColor, color)
 	this.backgroundImage = new Image();
 	this.fillImage = new Image();
 	
+	this.intervalId;
+	
 	this.backgroundImage.onerror = function()
 	{
 		console.log("Cannot load background image");
@@ -117,7 +132,7 @@ function graphicUpdater(width, height, backgroundColor, color)
 	
 	this.start = function()
 	{
-		setInterval(this.update, 1000/60);
+		this.intervalId = setInterval(this.update, 1000/60);
 	}
 	
 	var self = this;
@@ -155,6 +170,16 @@ function graphicUpdater(width, height, backgroundColor, color)
 			ctx.lineWidth = self.borderWidth;
 			ctx.strokeRect(self.barX, self.barY, self.width, self.height);
 		}
+	}
+	
+	this.stopLoading = function()
+	{
+		clearInterval(self.intervalId);
+		
+		if(self.createdCanvas)
+			document.getElementById("gloadCanvas").remove();
+		
+		
 	}
 }
 
