@@ -53,6 +53,11 @@ function progressBar(width, height, backgroundColor, color)
 	{
 		this.progressUpdater.closeTime = time;
 	}
+	
+	this.isFinished = function()
+	{
+		return (this.graphicUpdater.finished);
+	}
 }
 
 function progressUpdater(graphicUpdater)
@@ -64,6 +69,7 @@ function progressUpdater(graphicUpdater)
 	this.totalFileNumber = 0;
 	this.graphicUpdater = graphicUpdater;
 	this.closeTime = 0;
+	
 	
 	this.start = function()
 	{
@@ -97,6 +103,7 @@ function graphicUpdater(width, height, backgroundColor, color)
 {
 	this.canvas;
 	this.createdCanvas = true;
+	this.finished = false;
 	
 	this.createCanvas = function()
 	{
@@ -174,6 +181,7 @@ function graphicUpdater(width, height, backgroundColor, color)
 	
 	this.stopLoading = function()
 	{
+		self.finished = true;
 		clearInterval(self.intervalId);
 		
 		self.update();
