@@ -22,9 +22,17 @@ function progressBar(width, height, backgroundColor, color)
 	this.start = function()
 	{
 		if(this.createCanvas)
+		{
 			this.graphicUpdater.createCanvas();
+			this.graphicUpdater.start();
+		}
 		
 		this.progressUpdater.start();
+	}
+	
+	this.draw = function()
+	{
+		this.graphicUpdater.update();
 	}
 	
 	this.setColors = function(backgroundColor, color)
@@ -73,7 +81,6 @@ function progressUpdater(graphicUpdater)
 	
 	this.start = function()
 	{
-		this.graphicUpdater.start();
 		this.files[0].load();
 	}
 	
@@ -148,6 +155,9 @@ function graphicUpdater(width, height, backgroundColor, color)
 	{
 		var ctx = self.canvas.getContext("2d");
 		
+		if(!self.finished)
+		{
+		
 		ctx.clearRect(self.barX, self.barY, self.width, self.height);
 		
 		if(self.backgroundImage.src=="")
@@ -176,6 +186,7 @@ function graphicUpdater(width, height, backgroundColor, color)
 			ctx.strokeStyle = self.borderColor;
 			ctx.lineWidth = self.borderWidth;
 			ctx.strokeRect(self.barX, self.barY, self.width, self.height);
+		}
 		}
 	}
 	
