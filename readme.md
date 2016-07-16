@@ -1,4 +1,6 @@
 ![demo](https://github.com/AnselmeClergeot/gload.js/blob/master/demo/gris.PNG)
+<img src="https://github.com/AnselmeClergeot/gload.js/blob/master/demo/logo.png" width="50%" height="50%" />
+
 ### gload.js - load your file with simple progress bar
 
 gload.js enables you to preload the files (Image and Audio) that your js application needs, and displays to the user a loading bar that you can customize.
